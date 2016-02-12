@@ -6,6 +6,7 @@ public class TableExample extends AbstractTableModel implements TableModel {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		TableExample example = new TableExample();
+		
 	}
 
 	@Override
