@@ -49,16 +49,9 @@ public class ErrorTable extends AbstractTableModel {
 	}
 	
 	
-	public void addRow(ArrayList rowData)
+	public void addRow()
     {
-		for (Object element : data) {
-			if (element.equals("")) {
-				element = "";
-			}
-			element = "Kanye";
-		}
-        errorMessages.add(0, rowData);
-        System.out.println("The row data " + rowData + " The data array " + data);
+        errorMessages.add(0, dataRow);
         fireTableRowsInserted(errorMessages.size() - 1, errorMessages.size() - 1);
     }
 	
@@ -69,7 +62,7 @@ public class ErrorTable extends AbstractTableModel {
 		this.dataRow.add(errorDescription);
 		this.dataRow.add(dateStamp);
 		this.dataRow.add(timeStamp);
-		this.data.add(dataRow);
+		this.data.add(0,dataRow);
 	}
 	
 	@Override

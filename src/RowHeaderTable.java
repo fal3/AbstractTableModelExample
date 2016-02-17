@@ -1,13 +1,8 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.List;
-import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -20,24 +15,20 @@ import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 
 public class RowHeaderTable extends JFrame {
 
 	public static void main(String[] args) {
 		RowHeaderTable rht = new RowHeaderTable();
-
+//		rht.et.addRow(rowData);
 		rht.setVisible(true);
 	}
-	
+	ErrorTable et = new ErrorTable("348723984","Some error description", "new date","The time");
 	public RowHeaderTable() {
 		super("Error Dialog");
 		Dimension prefSize = new Dimension(700, 400);
@@ -45,7 +36,7 @@ public class RowHeaderTable extends JFrame {
 		setPreferredSize(prefSize);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		ErrorTable et = new ErrorTable("348723984","Some error description", "new date","The time");
+		
 		JButton closeButt = new JButton("Close");
 		closeButt.setSize(new Dimension(80, 40));
 		closeButt.addActionListener(new ActionListener() {
@@ -54,10 +45,6 @@ public class RowHeaderTable extends JFrame {
 		        System.exit(0);
 		    }
 		});
-		
-		
-		
-
 		
 		DefaultTableColumnModel cm = new DefaultTableColumnModel() {
 			boolean first = true;
@@ -97,11 +84,6 @@ public class RowHeaderTable extends JFrame {
 		headerColumn.createDefaultColumnsFromModel();
 		
 		jt.setSelectionModel(headerColumn.getSelectionModel());
-//		for (int i = 0; i < et.getRowCount(); i++) {
-//			if((int)et.getValueAt(i, 4).toString().length() > 40) {
-//				jt.setRowHeight(i, 200);
-//			}
-//		}
 		
 		 jt.setCellSelectionEnabled(true);
 		 ListSelectionModel cellSelectionModel = jt.getSelectionModel();
@@ -117,7 +99,7 @@ public class RowHeaderTable extends JFrame {
 		        for (int i = 0; i < selectedRow.length; i++) {
 		        	String title = (String) jt.getValueAt(selectedRow[i],0);
 		          for (int j = 0; j < selectedColumns.length; j++) {
-					//Store the selected data into a variable\
+					//Store the selected data into a variable
 		            String selectedData = (String) jt.getValueAt(selectedRow[i], selectedColumns[j]);
 		            //Show info on click
 		            System.out.println("Selected: " + selectedData);
@@ -172,15 +154,8 @@ public class RowHeaderTable extends JFrame {
 		addRowButt.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
 		    {
-		    	et.makeRowList("63423423","Some new error description", "The date","The time");
-		    	ArrayList data = new ArrayList();
-				data.add("");
-				data.add("Some new error description");
-				data.add("Some new error description");
-				data.add("Some new error description");
-				data.add("Some new error description");
-				
-				et.addRow(data);
+		    	et.makeRowList("635435323423","Some new error description", "The date","The time");
+				et.addRow();
 		    	
 		    }
 		});
