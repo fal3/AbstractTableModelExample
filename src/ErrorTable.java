@@ -16,7 +16,7 @@ public class ErrorTable extends AbstractTableModel {
 	String headers[] = {"Row #","Error Code","Error Description" , "Date Stamp","Time Stamp"};
 	private ArrayList errorMessages = new ArrayList(100);
 	
-	ErrorTable(int errorCode,String errorDescription, String dateStamp, String timeStamp) { 
+	ErrorTable(String errorCode,String errorDescription, String dateStamp, String timeStamp) { 
 		errorMessages.add("");
 		errorMessages.remove(errorMessages.size()-1);
 		makeRowList(errorCode, errorDescription, dateStamp, timeStamp);
@@ -62,7 +62,7 @@ public class ErrorTable extends AbstractTableModel {
         fireTableRowsInserted(errorMessages.size() - 1, errorMessages.size() - 1);
     }
 	
-	public void makeRowList(int errorCode,String errorDescription, String dateStamp, String timeStamp) {
+	public void makeRowList(String errorCode,String errorDescription, String dateStamp, String timeStamp) {
 		this.dataRow = new ArrayList();
 		this.dataRow.add("");
 		this.dataRow.add(errorCode);

@@ -45,7 +45,7 @@ public class RowHeaderTable extends JFrame {
 		setPreferredSize(prefSize);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		ErrorTable et = new ErrorTable(69,"Some error description", "new date","The time");
+		ErrorTable et = new ErrorTable("348723984","Some error description", "new date","The time");
 		JButton closeButt = new JButton("Close");
 		closeButt.setSize(new Dimension(80, 40));
 		closeButt.addActionListener(new ActionListener() {
@@ -121,17 +121,10 @@ public class RowHeaderTable extends JFrame {
 		            String selectedData = (String) jt.getValueAt(selectedRow[i], selectedColumns[j]);
 		            //Show info on click
 		            System.out.println("Selected: " + selectedData);
-		            SwingUtilities.invokeLater(new Runnable() {
-		            	public void run() {
-		            		JOptionPane.showMessageDialog(rootPane, selectedData, title, NORMAL);
-		            	}
-		            });
+		            JOptionPane.showMessageDialog(rootPane, selectedData, title, NORMAL);
 		            
 		          }
 		        }
-		
-//		        DefaultTableModel model = (DefaultTableModel) jt.getModel();
-//		        model.addRow(new Object[]{"Ass","butts"});
 		      }
 	
 
@@ -179,7 +172,7 @@ public class RowHeaderTable extends JFrame {
 		addRowButt.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
 		    {
-		    	et.makeRowList(69,"Some new error description", "The date","The time");
+		    	et.makeRowList("63423423","Some new error description", "The date","The time");
 		    	ArrayList data = new ArrayList();
 				data.add("");
 				data.add("Some new error description");
@@ -187,12 +180,7 @@ public class RowHeaderTable extends JFrame {
 				data.add("Some new error description");
 				data.add("Some new error description");
 				
-				SwingUtilities.invokeLater(new Runnable() {
-	            	public void run() {
-	            		et.addRow(data);
-
-	            	}
-	            });
+				et.addRow(data);
 		    	
 		    }
 		});
