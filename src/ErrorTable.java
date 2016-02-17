@@ -1,40 +1,47 @@
 import java.awt.List;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 public class ErrorTable extends AbstractTableModel {
-
-//	super("Header");
-//	setSize(300,200);
-//	setDefaultCloseOperation(EXIT_ON_CLOSE);
 	
-	
-//	final int errorCode,
-//    final String errorDescription,
-//    final String dateStamp,
-//    final String timeStamp) {
-	
-	String data[] = {"","a","c","b","Alex "};
+	int errorCode;
+    String errorDescription;
+    String dateStamp;
+    String timeStamp;
+	ArrayList dataRow;
+	ArrayList data = new ArrayList();
 	String headers[] = {"Row #","Error Code","Error Description" , "Date Stamp","Time Stamp"};
-	private ArrayList errorMessages = new ArrayList();
+	private ArrayList errorMessages = new ArrayList(100);
 	
-	 
+	ErrorTable(int errorCode,String errorDescription, String dateStamp, String timeStamp) { 
+		errorMessages.add("");
+		errorMessages.remove(errorMessages.size()-1);
+		makeRowList(errorCode, errorDescription, dateStamp, timeStamp);
+	}
 	 
 	@Override
 	public int getColumnCount() {
-		return data.length; 
+		return headers.length;
 	}
 
 	@Override
 	public int getRowCount() {
-		return 100;
+		return errorMessages.size();
 	}
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		return data[col] + row;
+		if (col == 0) {
+			return row+1;
+		}
+		ArrayList rowData = new ArrayList();
+		rowData = (ArrayList)data.get(row);
+		System.out.println("row Data" + rowData.get(col));
+		
+		return rowData.get(col);
 	}
 	
 	public String getColumnName(int col) {
@@ -42,11 +49,35 @@ public class ErrorTable extends AbstractTableModel {
 	}
 	
 	
-	public void addRow(List rowData)
+	public void addRow(ArrayList rowData)
     {
-        errorMessages.add(rowData);
+		for (Object element : data) {
+			if (element.equals("")) {
+				element = "";
+			}
+			element = "Kanye";
+		}
+        errorMessages.add(0, rowData);
+        System.out.println("The row data " + rowData + " The data array " + data);
         fireTableRowsInserted(errorMessages.size() - 1, errorMessages.size() - 1);
     }
+	
+	public void makeRowList(int errorCode,String errorDescription, String dateStamp, String timeStamp) {
+		this.dataRow = new ArrayList();
+		this.dataRow.add("");
+		this.dataRow.add(errorCode);
+		this.dataRow.add(errorDescription);
+		this.dataRow.add(dateStamp);
+		this.dataRow.add(timeStamp);
+		this.data.add(dataRow);
+	}
+	
+	@Override
+		public void fireTableRowsInserted(int firstRow, int lastRow) {
+		
+		System.out.println("wtf");
+			super.fireTableRowsInserted(firstRow, lastRow);
+		}
 	
 	
 }

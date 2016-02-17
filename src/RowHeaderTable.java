@@ -6,9 +6,11 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.List;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -42,7 +45,7 @@ public class RowHeaderTable extends JFrame {
 		setPreferredSize(prefSize);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		ErrorTable et = new ErrorTable();
+		ErrorTable et = new ErrorTable(69,"Some error description", "new date","The time");
 		JButton closeButt = new JButton("Close");
 		closeButt.setSize(new Dimension(80, 40));
 		closeButt.addActionListener(new ActionListener() {
@@ -106,22 +109,27 @@ public class RowHeaderTable extends JFrame {
 
 		    cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
 		      public void valueChanged(ListSelectionEvent e) {
-		        String selectedData = null;
-		        String title = null;
+		     
 		        
 		        int[] selectedRow = jt.getSelectedRows();
 		        int[] selectedColumns = jt.getSelectedColumns();
 
 		        for (int i = 0; i < selectedRow.length; i++) {
-		        	title = (String) jt.getValueAt(selectedRow[i],0);
+		        	String title = (String) jt.getValueAt(selectedRow[i],0);
 		          for (int j = 0; j < selectedColumns.length; j++) {
 					//Store the selected data into a variable\
-		            selectedData = (String) jt.getValueAt(selectedRow[i], selectedColumns[j]);
+		            String selectedData = (String) jt.getValueAt(selectedRow[i], selectedColumns[j]);
 		            //Show info on click
-		            JOptionPane.showMessageDialog(rootPane, selectedData, title, NORMAL);
+		            System.out.println("Selected: " + selectedData);
+		            SwingUtilities.invokeLater(new Runnable() {
+		            	public void run() {
+		            		JOptionPane.showMessageDialog(rootPane, selectedData, title, NORMAL);
+		            	}
+		            });
+		            
 		          }
 		        }
-		        System.out.println("Selected: " + selectedData);
+		
 //		        DefaultTableModel model = (DefaultTableModel) jt.getModel();
 //		        model.addRow(new Object[]{"Ass","butts"});
 		      }
@@ -148,10 +156,9 @@ public class RowHeaderTable extends JFrame {
 		JScrollPane jsp = new JScrollPane(jt);
 		jsp.setRowHeader(jv);
 		jsp.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, headerColumn.getTableHeader());
-//		getContentPane().add(jsp, BorderLayout.CENTER);
-//		getContentPane().add(closeButt, BorderLayout.PAGE_END);
 		
 		rootPane.setLayout(new GridBagLayout());
+		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.ipady = 270;      //make this component tall
@@ -161,15 +168,38 @@ public class RowHeaderTable extends JFrame {
 		c.gridx = 0;
 		c.gridy = 1;
 		rootPane.add(jsp, c);
-		
-		
-//		c.fill = GridBagConstraints.HORIZONTAL;
+			
 		GridBagConstraints d = new GridBagConstraints();
 		d.insets = new Insets(10,0,0,0);
 		d.gridx = 3;
 		d.gridy = 2;
 		rootPane.add(closeButt, d);
 		
+		JButton addRowButt = new JButton("add row");
+		addRowButt.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e)
+		    {
+		    	et.makeRowList(69,"Some new error description", "The date","The time");
+		    	ArrayList data = new ArrayList();
+				data.add("");
+				data.add("Some new error description");
+				data.add("Some new error description");
+				data.add("Some new error description");
+				data.add("Some new error description");
+				
+				SwingUtilities.invokeLater(new Runnable() {
+	            	public void run() {
+	            		et.addRow(data);
+
+	            	}
+	            });
+		    	
+		    }
+		});
+		GridBagConstraints e = new GridBagConstraints();
+		d.gridx = 4;
+		d.gridy = 3;
+		rootPane.add(addRowButt, e);
 	}
 
 }
