@@ -1,26 +1,24 @@
 import java.awt.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 public class ErrorTable extends AbstractTableModel {
-	
 	int errorCode;
     String errorDescription;
     String dateStamp;
     String timeStamp;
+    
 	ArrayList dataRow;
 	ArrayList data = new ArrayList();
 	String headers[] = {"Row #","Error Code","Error Description" , "Date Stamp","Time Stamp"};
-	private ArrayList errorMessages = new ArrayList(100);
-	
-	ErrorTable(String errorCode,String errorDescription, String dateStamp, String timeStamp) { 
-		errorMessages.add("");
-		errorMessages.remove(errorMessages.size()-1);
-		makeRowList(errorCode, errorDescription, dateStamp, timeStamp);
-	}
 	 
 	@Override
 	public int getColumnCount() {
@@ -29,7 +27,10 @@ public class ErrorTable extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return errorMessages.size();
+		if (this.data.size() >= 10) {
+			return 10;
+		}
+		return this.data.size();
 	}
 
 	@Override
@@ -39,8 +40,6 @@ public class ErrorTable extends AbstractTableModel {
 		}
 		ArrayList rowData = new ArrayList();
 		rowData = (ArrayList)data.get(row);
-		System.out.println("row Data" + rowData.get(col));
-		
 		return rowData.get(col);
 	}
 	
@@ -51,8 +50,16 @@ public class ErrorTable extends AbstractTableModel {
 	
 	public void addRow()
     {
-        errorMessages.add(0, dataRow);
-        fireTableRowsInserted(errorMessages.size() - 1, errorMessages.size() - 1);
+		this.data.add(0,dataRow);
+		if(this.data.size() >= 10) {
+			System.out.println("row count" + getRowCount());
+			System.out.println("Size of 100");
+			fireTableRowsDeleted(0,	getRowCount());
+		} else {
+			fireTableRowsInserted(this.data.size() - 1, this.data.size() - 1);
+		}
+		
+        
     }
 	
 	public void makeRowList(String errorCode,String errorDescription, String dateStamp, String timeStamp) {
@@ -61,16 +68,24 @@ public class ErrorTable extends AbstractTableModel {
 		this.dataRow.add(errorCode);
 		this.dataRow.add(errorDescription);
 		this.dataRow.add(dateStamp);
-		this.dataRow.add(timeStamp);
-		this.data.add(0,dataRow);
+		if (getRowCount() >= 10) {
+			this.dataRow.add("ALEX");
+		} else {
+			this.dataRow.add(timeStamp);	
+		}
+		addRow();
 	}
 	
-	@Override
-		public void fireTableRowsInserted(int firstRow, int lastRow) {
-		
-		System.out.println("wtf");
-			super.fireTableRowsInserted(firstRow, lastRow);
+	private String parseDate(String strDate) {
+	    SimpleDateFormat sdf = new SimpleDateFormat("MMddyy");
+	    Date str = null;
+		try {
+			str = (Date) sdf.parse(strDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
-	
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		return df.format(str);
+	}
 	
 }

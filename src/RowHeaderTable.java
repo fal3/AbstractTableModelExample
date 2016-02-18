@@ -5,7 +5,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,11 +30,26 @@ import javax.swing.table.TableColumnModel;
 public class RowHeaderTable extends JFrame {
 
 	public static void main(String[] args) {
-		RowHeaderTable rht = new RowHeaderTable();
-//		rht.et.addRow(rowData);
-		rht.setVisible(true);
+//		RowHeaderTable rht = new RowHeaderTable();
+//		rht.setVisible(true);
+		String strDate = "021816";
+		System.out.println(new Long(strDate));
+	
+		
+	    SimpleDateFormat sdf = new SimpleDateFormat("MMddyy");
+//	    Date date = new Date();
+	    Date str = null;
+		try {
+			str = (Date) sdf.parse(strDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+	    System.out.println("formatted date in mm/dd/yy : " + df.format(str));
+
+//		String out = date.fo
 	}
-	ErrorTable et = new ErrorTable("348723984","Some error description", "new date","The time");
+	ErrorTable et = new ErrorTable();
 	public RowHeaderTable() {
 		super("Error Dialog");
 		Dimension prefSize = new Dimension(700, 400);
@@ -155,8 +176,6 @@ public class RowHeaderTable extends JFrame {
 		    public void actionPerformed(ActionEvent e)
 		    {
 		    	et.makeRowList("635435323423","Some new error description", "The date","The time");
-				et.addRow();
-		    	
 		    }
 		});
 		GridBagConstraints e = new GridBagConstraints();
