@@ -27,51 +27,43 @@ import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-public class RowHeaderTable extends JFrame {
+/**
+ * Called by the DisplayHandlerError. Has a table model of
+ * type ErrorTable. This class is set to visible every time
+ * an error occurs from SC or RC.
+ * 
+ * @author afallah
+ * @created 2-19-16
+ */
+public class ErrorScrollTable extends JFrame {
 
 	public static void main(String[] args) {
-//		RowHeaderTable rht = new RowHeaderTable();
-//		rht.setVisible(true);
-		String strDate = "021816";
-		System.out.println(new Long(strDate));
-	
-		
-	    SimpleDateFormat sdf = new SimpleDateFormat("MMddyy");
-//	    Date date = new Date();
-	    Date str = null;
-		try {
-			str = (Date) sdf.parse(strDate);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-	    System.out.println("formatted date in mm/dd/yy : " + df.format(str));
-
-//		String out = date.fo
+		ErrorScrollTable rht = new ErrorScrollTable();
+		rht.setVisible(true);
 	}
-	ErrorTable et = new ErrorTable();
-	public RowHeaderTable() {
+	private ErrorTable et = new ErrorTable();
+	public ErrorScrollTable() {
 		super("Error Dialog");
-		Dimension prefSize = new Dimension(700, 400);
+		Dimension prefSize = new Dimension(1100, 400);
 		setSize(prefSize);
 		setPreferredSize(prefSize);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
 		JButton closeButt = new JButton("Close");
 		closeButt.setSize(new Dimension(80, 40));
 		closeButt.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
 		    {
-		        System.exit(0);
+		        setVisible(false);
 		    }
 		});
 		
 		DefaultTableColumnModel cm = new DefaultTableColumnModel() {
-			boolean first = true;
+			boolean first = true; 
+			int columnCount = 0;
 			public void addColumn(TableColumn tc) {
-				if(first) {
-					first = false;
+				if(columnCount < 2) {
+					columnCount++;
 					return;
 				}
 				tc.setMinWidth(150);
@@ -81,16 +73,18 @@ public class RowHeaderTable extends JFrame {
 		
 		//Create a column model that will serve as our row header table
 		TableColumnModel rowHeaderModel = new DefaultTableColumnModel() {
-			boolean first = true;
+			int columnCount = 0;
 			public void addColumn(TableColumn tc) {
-				if (first) {
-					tc.setMaxWidth(tc.getPreferredWidth());
+				if (columnCount < 2) {
+					tc.setMaxWidth(75);
 					super.addColumn(tc);
-					first = false;
+					columnCount++;
 				}
 				//drop the rest of the columns, this is the header only
 			}
 		};
+		
+		
 		
 		JTable jt = new JTable(et,cm){
             public boolean getScrollableTracksViewportWidth()
@@ -98,8 +92,9 @@ public class RowHeaderTable extends JFrame {
                 return getPreferredSize().width < getParent().getWidth();
             }
         };
+        
 		
-		//set up header column and hook it to everything
+		//Set up header column and hook it to everything
 		JTable headerColumn = new JTable (et,rowHeaderModel);
 		jt.createDefaultColumnsFromModel();
 		headerColumn.createDefaultColumnsFromModel();
@@ -109,46 +104,23 @@ public class RowHeaderTable extends JFrame {
 		 jt.setCellSelectionEnabled(true);
 		 ListSelectionModel cellSelectionModel = jt.getSelectionModel();
 		 cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		    cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
-		      public void valueChanged(ListSelectionEvent e) {
-		     
-		        
-		        int[] selectedRow = jt.getSelectedRows();
-		        int[] selectedColumns = jt.getSelectedColumns();
-
-		        for (int i = 0; i < selectedRow.length; i++) {
-		        	String title = (String) jt.getValueAt(selectedRow[i],0);
-		          for (int j = 0; j < selectedColumns.length; j++) {
-					//Store the selected data into a variable
-		            String selectedData = (String) jt.getValueAt(selectedRow[i], selectedColumns[j]);
-		            //Show info on click
-		            System.out.println("Selected: " + selectedData);
-		            JOptionPane.showMessageDialog(rootPane, selectedData, title, NORMAL);
-		            
-		          }
-		        }
-		      }
-	
-
-		    });
 		
-		//make header look pretty
-		headerColumn.setBackground(Color.lightGray);
+		//Make header look pretty
 		headerColumn.setColumnSelectionAllowed(false);
 		headerColumn.setCellSelectionEnabled(false);
+
 		
-		//put in viewport that we can control
+		//Put in viewport that we can control
 		JViewport jv = new JViewport();
 		jv.setView(headerColumn);
 		jv.setPreferredSize(headerColumn.getMaximumSize());
 		
-		//without shutting off autoResizemode our tables wont scroll correctly
+		//Without shutting off autoResizemode our tables wont scroll correctly
 		jt.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jt.getTableHeader().setReorderingAllowed(false);
 		setResizable(false);
-		
-		
-		//we have too manually attach the row header but the scroll pane will keep them in sync
+			
+		//We have too manually attach the row header but the scroll pane will keep them in sync
 		JScrollPane jsp = new JScrollPane(jt);
 		jsp.setRowHeader(jv);
 		jsp.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, headerColumn.getTableHeader());
@@ -158,7 +130,7 @@ public class RowHeaderTable extends JFrame {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.ipady = 270;      //make this component tall
-		c.ipadx = 670;
+		c.ipadx = 1070;
 		c.weightx = 0.0;
 		c.gridwidth = 4;
 		c.gridx = 0;
@@ -175,11 +147,13 @@ public class RowHeaderTable extends JFrame {
 		addRowButt.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
 		    {
-		    	et.makeRowList("635435323423","Some new error description", "The date","The time");
+		    	et.makeRowList("021916","15:10:51:163", "Scan Manager: there is a mismatch in the number of data elements "
+		    			+ "for Powerlink Calibration of phase/frequency initial "
+		    			+ "gains or gain limits." );
 		    }
 		});
 		GridBagConstraints e = new GridBagConstraints();
-		d.gridx = 4;
+		d.gridx = 3;
 		d.gridy = 3;
 		rootPane.add(addRowButt, e);
 	}
