@@ -18,14 +18,21 @@ import javax.swing.table.AbstractTableModel;
 public class ErrorTable extends AbstractTableModel {
 	
 	private ArrayList<String> dataRow;
-	private LinkedList data = new LinkedList();
+	private LinkedList<ArrayList<String>> data = new LinkedList<ArrayList<String>>();
 	private String headers[] = {"Date Stamp","Time Stamp","Error Description"};
 	private static final int MAX_ROW_SIZE = 10;
+	
+	/**
+	* {@inheritDoc}
+	*/
 	@Override
 	public int getColumnCount() {
 		return headers.length;
 	}
-
+	
+	/**
+	* {@inheritDoc}
+	*/
 	@Override
 	public int getRowCount() {
 		if (this.data.size() >= MAX_ROW_SIZE) {
@@ -33,17 +40,20 @@ public class ErrorTable extends AbstractTableModel {
 		}
 		return this.data.size();
 	}
-
+	
+	/**
+	* {@inheritDoc}
+	*/
 	@Override
 	public Object getValueAt(int row, int col) {
-//		if (col == 0) {
-//			return row+1;
-//		}
-		ArrayList rowData = new ArrayList<String>();
+		ArrayList<String> rowData = new ArrayList<String>();
 		rowData = (ArrayList<String>)data.get(row);
 		return rowData.get(col);
 	}
 	
+	/**
+	* {@inheritDoc}
+	*/
 	@Override
 	public String getColumnName(int col) {
 		return headers[col];
@@ -62,6 +72,7 @@ public class ErrorTable extends AbstractTableModel {
 		} else {
 			fireTableRowsInserted(this.data.size() - 1, this.data.size() - 1);
 		}
+		System.out.println(this.data);
     }
 	
 	/**
@@ -117,7 +128,7 @@ public class ErrorTable extends AbstractTableModel {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		DateFormat tf = new SimpleDateFormat("hh:mm:ss");
+		DateFormat tf = new SimpleDateFormat("HH:mm:ss");
 		return tf.format(tStr);
 	}
 	

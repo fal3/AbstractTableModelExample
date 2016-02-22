@@ -1,28 +1,17 @@
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -39,6 +28,9 @@ public class ErrorScrollTable extends JFrame {
 
 	public static void main(String[] args) {
 		ErrorScrollTable rht = new ErrorScrollTable();
+		rht.addRow("021916","15:10:51:163","Kanye");
+		rht.addRow("022116","15:10:51:163","Alex");
+		rht.addRow("022116","15:10:51:163","John");
 		rht.setVisible(true);
 	}
 	private ErrorTable et = new ErrorTable();
@@ -84,8 +76,6 @@ public class ErrorScrollTable extends JFrame {
 			}
 		};
 		
-		
-		
 		JTable jt = new JTable(et,cm){
             public boolean getScrollableTracksViewportWidth()
             {
@@ -93,7 +83,6 @@ public class ErrorScrollTable extends JFrame {
             }
         };
         
-		
 		//Set up header column and hook it to everything
 		JTable headerColumn = new JTable (et,rowHeaderModel);
 		jt.createDefaultColumnsFromModel();
@@ -156,6 +145,10 @@ public class ErrorScrollTable extends JFrame {
 		d.gridx = 3;
 		d.gridy = 3;
 		rootPane.add(addRowButt, e);
+	}
+	
+	public void addRow(String errorDescription, String dateStamp,String timeStamp) {
+		et.makeRowList(errorDescription,dateStamp,timeStamp);
 	}
 
 }
